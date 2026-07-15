@@ -45,7 +45,7 @@ The safe and balanced values are kept at one when the calculated maximum is one.
 | Balanced | 2 GB | General implementation and review |
 | Heavy | 4 GB | Builds, browser automation, large contexts |
 
-The system reserve can be adjusted manually. All calculations run locally in the browser.
+The system reserve can be adjusted manually. Total RAM accepts 4 GB through 2 TB (2048 GB) in 4 GB steps. All calculations run locally in the browser.
 
 ## Limits
 
@@ -98,7 +98,7 @@ AgentFit was created during OpenAI Build Week with Codex using GPT-5.6. The prim
 
 ### Result
 
-The final project is a working, public developer tool with transparent formulas, 19 automated tests, a no-build local run path, GitHub Pages deployment, and documented limits. GPT-5.6 and Codex were used for the majority of the architecture, implementation, review, debugging, and deployment work; the session ID above provides the build trace for judges.
+The final project is a working, public developer tool with transparent formulas, 20 automated tests, a no-build local run path, GitHub Pages deployment, and documented limits. GPT-5.6 and Codex were used for the majority of the architecture, implementation, review, debugging, and deployment work; the session ID above provides the build trace for judges.
 
 ## License
 

@@ -65,6 +65,11 @@ function clearResult() {
   elements.extremeCount.textContent = '—';
   elements.extremeSwap.textContent = '—';
   elements.extremeCombined.textContent = '—';
+  elements.equationTotal.textContent = '—';
+  elements.equationReserve.textContent = '—';
+  elements.equationMain.textContent = '—';
+  elements.equationPool.textContent = '—';
+  elements.detailPerAgent.textContent = '—';
   elements.resultSummary.textContent = 'RAM과 시스템 여유분을 확인하면 다시 계산합니다.';
   elements.copyButton.disabled = true;
 }
@@ -165,7 +170,7 @@ function detectRam() {
     return;
   }
 
-  const normalized = Math.min(256, Math.max(4, Math.round(detected / 4) * 4));
+  const normalized = Math.min(2048, Math.max(4, Math.round(detected / 4) * 4));
   elements.ramRange.value = String(normalized);
   elements.ramNumber.value = String(normalized);
   elements.detectStatus.textContent = `브라우저가 약 ${detected}GB로 알려줬습니다. 정확한 값과 다르면 직접 수정하세요.`;

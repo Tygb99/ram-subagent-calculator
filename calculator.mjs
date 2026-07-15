@@ -17,8 +17,8 @@ export function parseRamInput(value) {
   }
 
   const ram = Number(value);
-  if (!Number.isFinite(ram) || ram < 4 || ram > 256 || ram % 4 !== 0) {
-    throw new RangeError('RAM must be between 4 and 256 GB in 4 GB steps.');
+  if (!Number.isFinite(ram) || ram < 4 || ram > 2048 || ram % 4 !== 0) {
+    throw new RangeError('RAM must be between 4 and 2048 GB in 4 GB steps.');
   }
 
   return ram;
