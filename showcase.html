@@ -77,17 +77,17 @@
           <div>
             <label class="field-label" for="ram-range">전체 RAM</label>
             <div class="range-row">
-              <input type="range" id="ram-range" min="4" max="256" step="4" value="32" aria-describedby="ram-help ram-error">
-              <input class="number-input" id="ram-number" type="number" min="4" max="256" step="4" value="32" required aria-label="전체 RAM, GB" aria-describedby="ram-help ram-error">
+              <input type="range" id="ram-range" min="4" max="2048" step="4" value="32" aria-describedby="ram-help ram-error">
+              <input class="number-input" id="ram-number" type="number" min="4" max="2048" step="4" value="32" required aria-label="전체 RAM, GB" aria-describedby="ram-help ram-error">
             </div>
             <p class="helper" id="ram-help">단위: GB. 4GB 단위. 브라우저 자동 감지는 <span class="keep-together">선택 사항입니다.</span></p>
           </div>
           <div class="notice notice-error" id="ram-error" role="alert" hidden>
-            RAM은 4GB부터 256GB까지, 4GB 단위로 <span class="keep-together">입력해 주세요.</span>
+            RAM은 4GB부터 2TB(2048GB)까지, <span class="keep-together">4GB 단위로 입력해 주세요.</span>
           </div>
           <div>
             <label class="field-label" for="disabled-range">비활성 범위 예시</label>
-            <input type="range" id="disabled-range" min="4" max="256" value="16" disabled>
+            <input type="range" id="disabled-range" min="4" max="2048" value="16" disabled>
           </div>
         </section>
 

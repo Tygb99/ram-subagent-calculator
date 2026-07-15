@@ -11,13 +11,40 @@ import {
 
 test('parses RAM in the supported 4 GB steps', () => {
   assert.equal(parseRamInput('32'), 32);
-  assert.equal(parseRamInput(256), 256);
+  assert.equal(parseRamInput(2048), 2048);
 });
 
 test('rejects empty, out-of-range, and off-step RAM values', () => {
-  for (const value of ['', '3', '5', '260', 'hello', Number.NaN]) {
+  for (const value of ['', '3', '5', '2052', 'hello', Number.NaN]) {
     assert.throws(() => parseRamInput(value), RangeError);
   }
+});
+
+test('calculates recommendations at the 2 TB upper boundary', () => {
+  const result = calculateRecommendation(2048, 'balanced');
+
+  assert.deepEqual(
+    {
+      reserve: result.reserveGb,
+      pool: result.poolGb,
+      safe: result.safe,
+      balanced: result.balanced,
+      maximum: result.maximum,
+      extreme: result.extreme,
+    },
+    {
+      reserve: 16,
+      pool: 2030,
+      safe: 659,
+      balanced: 862,
+      maximum: 1015,
+      extreme: {
+        accumulatedAgents: 13653,
+        estimatedSwapGb: 1850.9,
+        estimatedCombinedMemoryGb: 3898.9,
+      },
+    },
+  );
 });
 
 test('uses auditable workload budgets', () => {

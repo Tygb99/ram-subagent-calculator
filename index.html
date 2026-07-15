@@ -65,14 +65,14 @@
                 <button class="button button-text compact-button" id="detect-ram" type="button">브라우저로 감지</button>
               </div>
               <div class="range-row">
-                <input type="range" id="ram-range" min="4" max="256" step="4" value="24" aria-describedby="ram-help ram-error">
+                <input type="range" id="ram-range" min="4" max="2048" step="4" value="24" aria-describedby="ram-help ram-error">
                 <div class="input-with-unit">
-                  <input class="number-input" id="ram-number" type="number" min="4" max="256" step="4" value="24" required inputmode="numeric" aria-label="전체 RAM, GB" aria-describedby="ram-help ram-error">
+                  <input class="number-input" id="ram-number" type="number" min="4" max="2048" step="4" value="24" required inputmode="numeric" aria-label="전체 RAM, GB" aria-describedby="ram-help ram-error">
                   <span aria-hidden="true">GB</span>
                 </div>
               </div>
               <p class="helper" id="ram-help">4GB 단위로 입력하세요. 감지는 선택 사항이며 브라우저에 따라 제한될 수 있습니다.</p>
-              <p class="field-error" id="ram-error" role="alert" hidden>4GB부터 256GB까지, 4GB 단위로 입력해 주세요.</p>
+              <p class="field-error" id="ram-error" role="alert" hidden>4GB부터 2TB(2048GB)까지, <span class="keep-together">4GB 단위로 입력해 주세요.</span></p>
               <p class="detect-status" id="detect-status" role="status" aria-live="polite"></p>
             </div>
 
