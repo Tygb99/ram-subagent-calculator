@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>AgentFit 컴포넌트 쇼케이스</title>
+    <meta name="description" content="AgentFit 계산기 컴포넌트와 상호작용 상태를 확인하는 쇼케이스입니다.">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="results.css">
+    <link rel="stylesheet" href="showcase.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+    <header class="site-header shell">
+      <a class="brand" href="showcase.html">AgentFit / Components</a>
+      <span class="helper">Primitive gate</span>
+    </header>
+    <main class="showcase-main shell" id="main">
+      <section class="showcase-intro" aria-labelledby="showcase-title">
+        <p class="eyebrow">DESIGN SYSTEM</p>
+        <h1 id="showcase-title"><span class="headline-line">계산 전에,</span><span class="headline-line">상태부터 검증합니다.</span></h1>
+        <p class="lede">버튼, 입력, 선택, 결과, 안내 상태를 세 화면 폭과 키보드 흐름에서 확인하는 <span class="keep-together">내부 쇼케이스입니다.</span></p>
+      </section>
+
+      <div class="showcase-grid">
+        <section class="panel panel-pad showcase-section" aria-labelledby="buttons-title">
+          <div>
+            <h2 id="buttons-title">버튼</h2>
+            <p class="helper">기본, 보조, 비활성 상태</p>
+          </div>
+          <div class="cluster">
+            <button class="button button-primary" type="button">결과 복사</button>
+            <button class="button button-secondary" type="button">자동 감지</button>
+            <button class="button button-secondary" type="button" disabled>감지 중</button>
+            <button class="button button-text" type="button">초기화</button>
+          </div>
+        </section>
+
+        <section class="panel panel-pad showcase-section" aria-labelledby="preset-title">
+          <div>
+            <h2 id="preset-title">작업 유형</h2>
+            <p class="helper">라디오 키로 좌우 이동 가능</p>
+          </div>
+          <fieldset class="field-group">
+            <legend>에이전트당 작업 강도</legend>
+            <div class="segmented">
+              <input type="radio" name="preset" id="light" value="light">
+              <label for="light">가벼움</label>
+              <input type="radio" name="preset" id="balanced" value="balanced" checked>
+              <label for="balanced">균형</label>
+              <input type="radio" name="preset" id="heavy" value="heavy">
+              <label for="heavy">무거움</label>
+            </div>
+          </fieldset>
+          <fieldset class="field-group" disabled>
+            <legend>비활성 예시</legend>
+            <div class="segmented">
+              <input type="radio" name="disabled-preset" id="disabled-light" disabled checked>
+              <label for="disabled-light">가벼움</label>
+              <input type="radio" name="disabled-preset" id="disabled-balanced" disabled>
+              <label for="disabled-balanced">균형</label>
+              <input type="radio" name="disabled-preset" id="disabled-heavy" disabled>
+              <label for="disabled-heavy">무거움</label>
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="panel panel-pad showcase-section" aria-labelledby="range-title">
+          <div>
+            <h2 id="range-title">RAM 입력</h2>
+            <p class="helper">범위와 숫자 입력이 같은 값을 공유합니다.</p>
+          </div>
+          <div>
+            <label class="field-label" for="ram-range">전체 RAM</label>
+            <div class="range-row">
+              <input type="range" id="ram-range" min="4" max="256" step="4" value="32" aria-describedby="ram-help ram-error">
+              <input class="number-input" id="ram-number" type="number" min="4" max="256" step="4" value="32" required aria-label="전체 RAM, GB" aria-describedby="ram-help ram-error">
+            </div>
+            <p class="helper" id="ram-help">단위: GB. 4GB 단위. 브라우저 자동 감지는 <span class="keep-together">선택 사항입니다.</span></p>
+          </div>
+          <div class="notice notice-error" id="ram-error" role="alert" hidden>
+            RAM은 4GB부터 256GB까지, 4GB 단위로 <span class="keep-together">입력해 주세요.</span>
+          </div>
+          <div>
+            <label class="field-label" for="disabled-range">비활성 범위 예시</label>
+            <input type="range" id="disabled-range" min="4" max="256" value="16" disabled>
+          </div>
+        </section>
+
+        <section class="showcase-section" aria-labelledby="result-title">
+          <h2 id="result-title">결과</h2>
+          <div class="result-card" aria-live="polite">
+            <p class="result-label" id="result-label">균형 추천</p>
+            <div class="result-value">
+              <strong class="result-number" id="result-number">9</strong>
+              <span class="result-unit">서브에이전트</span>
+            </div>
+            <p class="result-summary" id="result-summary">일상 작업과 <span class="keep-together">갑작스러운 메모리 증가 사이에</span> <span class="keep-together">여유를 둔 권장값입니다.</span></p>
+            <dl class="detail-list">
+              <div class="detail-row"><dt>전체 RAM</dt><dd id="detail-total">32.0 GB</dd></div>
+              <div class="detail-row"><dt>시스템 여유분</dt><dd id="detail-reserve">-8.0 GB</dd></div>
+              <div class="detail-row"><dt>메인 에이전트</dt><dd id="detail-main">-2.0 GB</dd></div>
+              <div class="detail-row"><dt>서브에이전트 풀</dt><dd id="detail-pool">22.0 GB</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="panel panel-pad showcase-section showcase-section-wide" aria-labelledby="edge-states-title">
+          <h2 id="edge-states-title">경계 상태</h2>
+          <div class="state-grid">
+            <div class="result-card result-card-compact result-card-insufficient">
+              <p class="result-label">메모리 부족</p>
+              <div class="result-value"><strong class="result-number">0</strong><span class="result-unit">서브에이전트</span></div>
+              <p class="result-summary">시스템과 메인 에이전트용 RAM을 확보한 뒤에는 <span class="keep-together">안전한 병렬 실행 여유가 없습니다.</span></p>
+            </div>
+            <dl class="detail-list detail-list-warning">
+              <div class="detail-row"><dt>최대 실행</dt><dd>11개</dd></div>
+              <div class="detail-row"><dt>남는 RAM</dt><dd>0.0 GB</dd></div>
+              <div class="detail-row"><dt>권장 사용</dt><dd>짧은 실험만</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="panel panel-pad showcase-section showcase-section-wide" aria-labelledby="notices-title">
+          <h2 id="notices-title">안내 상태</h2>
+          <div class="notice" role="status">브라우저가 알려주는 RAM은 대략적인 값이며, 일부 환경에서는 8GB로 제한됩니다.</div>
+          <div class="notice notice-warning">최대값은 메모리를 거의 남기지 않습니다. <span class="keep-together">장시간 실행에는</span> <span class="keep-together">균형 추천을 사용하세요.</span></div>
+        </section>
+      </div>
+    </main>
+    <script src="showcase.js" defer></script>
+  </body>
+</html>

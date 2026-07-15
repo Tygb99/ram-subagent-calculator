@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+    <title>AgentFit — RAM 기반 서브에이전트 계산기</title>
+    <meta name="description" content="컴퓨터 RAM과 작업 강도를 입력하면 안전, 균형, 최대 서브에이전트 개수를 계산합니다.">
+    <meta property="og:title" content="AgentFit — RAM 기반 서브에이전트 계산기">
+    <meta property="og:description" content="내 컴퓨터 RAM에 맞는 서브에이전트 개수를 투명한 계산식으로 확인하세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tygb99.github.io/ram-subagent-calculator/">
+    <link rel="canonical" href="https://tygb99.github.io/ram-subagent-calculator/">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="results.css">
+    <link rel="stylesheet" href="app.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator">계산기로 건너뛰기</a>
+    <header class="site-header shell">
+      <a class="brand" href="./">AgentFit</a>
+      <a class="header-link" href="https://github.com/Tygb99/ram-subagent-calculator">GitHub</a>
+    </header>
+
+    <main class="app-main shell">
+      <section class="app-intro" aria-labelledby="page-title">
+        <p class="eyebrow">RAM-AWARE CONCURRENCY</p>
+        <h1 id="page-title"><span class="headline-line">RAM을 입력하면,</span><span class="headline-line">적정 개수가 보입니다.</span></h1>
+        <p class="lede">시스템과 메인 에이전트가 쓸 메모리를 먼저 남기고, 서브에이전트가 동시에 실행될 수 있는 범위를 계산합니다.</p>
+      </section>
+
+      <div class="calculator-layout" id="calculator">
+        <section class="panel panel-pad controls-card" aria-labelledby="controls-title">
+          <div class="section-heading">
+            <p class="step-label">01 / 입력</p>
+            <h2 id="controls-title">내 실행 환경</h2>
+          </div>
+
+          <div class="control-stack">
+            <div class="control-block">
+              <div class="label-row">
+                <label class="field-label" for="ram-range">전체 RAM</label>
+                <button class="button button-text compact-button" id="detect-ram" type="button">브라우저로 감지</button>
+              </div>
+              <div class="range-row">
+                <input type="range" id="ram-range" min="4" max="256" step="4" value="32" aria-describedby="ram-help ram-error">
+                <div class="input-with-unit">
+                  <input class="number-input" id="ram-number" type="number" min="4" max="256" step="4" value="32" required inputmode="numeric" aria-label="전체 RAM, GB" aria-describedby="ram-help ram-error">
+                  <span aria-hidden="true">GB</span>
+                </div>
+              </div>
+              <p class="helper" id="ram-help">4GB 단위로 입력하세요. 감지는 선택 사항이며 브라우저에 따라 제한될 수 있습니다.</p>
+              <p class="field-error" id="ram-error" role="alert" hidden>4GB부터 256GB까지, 4GB 단위로 입력해 주세요.</p>
+              <p class="detect-status" id="detect-status" role="status" aria-live="polite"></p>
+            </div>
+
+            <fieldset class="field-group control-block">
+              <legend>에이전트당 작업 강도</legend>
+              <div class="segmented">
+                <input type="radio" name="preset" id="preset-light" value="light">
+                <label for="preset-light"><strong>가벼움</strong><span>1 GB</span></label>
+                <input type="radio" name="preset" id="preset-balanced" value="balanced" checked>
+                <label for="preset-balanced"><strong>균형</strong><span>2 GB</span></label>
+                <input type="radio" name="preset" id="preset-heavy" value="heavy">
+                <label for="preset-heavy"><strong>무거움</strong><span>4 GB</span></label>
+              </div>
+              <p class="helper">코드 탐색은 가벼움, 일반 구현은 균형, 빌드·브라우저·대형 컨텍스트는 무거움을 권장합니다.</p>
+            </fieldset>
+
+            <details class="advanced-panel">
+              <summary>시스템 여유분 조정</summary>
+              <div class="advanced-content">
+                <div class="label-row">
+                  <label class="field-label" for="reserve-range">시스템과 다른 앱에 남길 RAM</label>
+                  <button class="button button-text compact-button" id="auto-reserve" type="button">자동값 사용</button>
+                </div>
+                <div class="range-row">
+                  <input type="range" id="reserve-range" min="0" max="32" step="1" value="8" aria-describedby="reserve-help reserve-error">
+                  <div class="input-with-unit">
+                    <input class="number-input" id="reserve-number" type="number" min="0" max="32" step="1" value="8" required inputmode="numeric" aria-label="시스템 여유분, GB" aria-describedby="reserve-help reserve-error">
+                    <span aria-hidden="true">GB</span>
+                  </div>
+                </div>
+                <p class="helper" id="reserve-help">자동값은 전체 RAM의 25%이며 최소 3GB, 최대 16GB입니다.</p>
+                <p class="field-error" id="reserve-error" role="alert" hidden>전체 RAM 안에서 0GB 이상의 값을 입력해 주세요.</p>
+              </div>
+            </details>
+          </div>
+
+          <div class="control-actions">
+            <button class="button button-secondary" id="reset-calculator" type="button">초기화</button>
+          </div>
+        </section>
+
+        <section class="result-card product-result" aria-labelledby="result-title" aria-live="polite">
+          <div class="result-heading">
+            <div>
+              <p class="step-label">02 / 결과</p>
+              <h2 id="result-title">균형 추천</h2>
+            </div>
+            <span class="result-badge" id="preset-badge">균형 · 2 GB</span>
+          </div>
+
+          <div class="primary-result">
+            <strong class="result-number" id="recommended-count">9</strong>
+            <span class="result-unit">서브에이전트</span>
+          </div>
+          <p class="result-summary" id="result-summary">속도와 메모리 여유 사이의 균형을 둔 권장값입니다.</p>
+
+          <div class="result-scale" aria-label="추천 범위">
+            <div class="scale-item">
+              <span>안전</span>
+              <strong id="safe-count">7</strong>
+            </div>
+            <div class="scale-item scale-item-featured">
+              <span>균형</span>
+              <strong id="balanced-count">9</strong>
+            </div>
+            <div class="scale-item">
+              <span>최대</span>
+              <strong id="maximum-count">11</strong>
+            </div>
+          </div>
+
+          <div class="equation" aria-label="메모리 계산식">
+            <span><strong id="equation-total">32</strong> 전체</span>
+            <span aria-hidden="true">−</span>
+            <span><strong id="equation-reserve">8</strong> 여유</span>
+            <span aria-hidden="true">−</span>
+            <span><strong id="equation-main">2</strong> 메인</span>
+            <span aria-hidden="true">=</span>
+            <span><strong id="equation-pool">22</strong> GB 풀</span>
+          </div>
+
+          <dl class="detail-list product-details">
+            <div class="detail-row"><dt>에이전트당 예상 RAM</dt><dd id="detail-per-agent">2.0 GB</dd></div>
+            <div class="detail-row"><dt>안전 추천</dt><dd>최대치의 65%</dd></div>
+            <div class="detail-row"><dt>균형 추천</dt><dd>최대치의 85%</dd></div>
+          </dl>
+
+          <div class="result-actions">
+            <button class="button button-primary" id="copy-result" type="button">결과 복사</button>
+            <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
+          </div>
+        </section>
+      </div>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div class="section-heading">
+          <p class="step-label">03 / 기준</p>
+          <h2 id="method-title">숫자를 해석하는 법</h2>
+        </div>
+        <div class="method-grid">
+          <article>
+            <span class="method-index">A</span>
+            <h3>안전</h3>
+            <p>장시간 실행하거나 다른 앱을 함께 쓸 때 시작하기 좋은 보수적 수치입니다.</p>
+          </article>
+          <article>
+            <span class="method-index">B</span>
+            <h3>균형</h3>
+            <p>일반적인 코딩 작업에서 속도와 갑작스러운 메모리 증가를 함께 고려한 권장값입니다.</p>
+          </article>
+          <article>
+            <span class="method-index">C</span>
+            <h3>최대</h3>
+            <p>계산상 상한입니다. 스왑과 응답 지연을 피하려면 지속 실행에는 권장하지 않습니다.</p>
+          </article>
+        </div>
+        <div class="notice limitation-notice">
+          이 계산기는 RAM만 봅니다. CPU 코어 수, 모델 제공자의 동시 요청 제한, 작업 간 의존성이 실제 병렬 개수를 더 낮출 수 있습니다.
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <p>계산식과 소스는 공개되어 있습니다.</p>
+      <nav aria-label="프로젝트 링크">
+        <a href="https://github.com/Tygb99/ram-subagent-calculator">소스 코드</a>
+        <a href="showcase.html">컴포넌트</a>
+      </nav>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
