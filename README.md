@@ -55,7 +55,7 @@ Do not use the extreme accumulated count as a simultaneous-concurrency recommend
 
 Browser RAM detection is opt-in and approximate. Some browsers do not expose it, and Chromium-based browsers may deliberately reduce precision. Manual input is authoritative.
 
-The header fetches the repository's public star count from the GitHub API. If that request is unavailable or rate-limited, the calculator continues to work and only the count is omitted.
+The header fetches the repository's public star count from Shields.io's cached JSON endpoint, avoiding GitHub's low unauthenticated browser rate limit. It falls back to the GitHub API if the cached endpoint is unavailable. If both sources fail, the calculator continues to work and only the count is omitted.
 
 ## Run locally
 
