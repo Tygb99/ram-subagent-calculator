@@ -3,6 +3,31 @@
   font-weight: 500;
 }
 
+.github-link,
+.github-stars {
+  display: inline-flex;
+  align-items: center;
+}
+
+.github-link {
+  gap: var(--space-2);
+}
+
+.github-stars {
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-control);
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+.github-stars[hidden] {
+  display: none;
+}
+
 .app-main {
   padding-block: var(--space-12) var(--space-20);
 }
@@ -297,8 +322,14 @@
 }
 
 @media (min-width: 48rem) {
+  .method-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 54rem) {
   .calculator-layout {
-    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   }
 
   .product-result {
@@ -306,9 +337,6 @@
     top: var(--space-6);
   }
 
-  .method-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 35rem) {

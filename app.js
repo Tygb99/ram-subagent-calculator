@@ -1,4 +1,5 @@
 import { calculateRecommendation, PRESETS } from './calculator.mjs';
+import { fetchGitHubStars } from './github-stats.mjs';
 
 const elements = {
   ramRange: document.querySelector('#ram-range'),
@@ -18,6 +19,9 @@ const elements = {
   safe: document.querySelector('#safe-count'),
   balanced: document.querySelector('#balanced-count'),
   maximum: document.querySelector('#maximum-count'),
+  extremeCount: document.querySelector('#extreme-count'),
+  extremeSwap: document.querySelector('#extreme-swap'),
+  extremeCombined: document.querySelector('#extreme-combined'),
   resultSummary: document.querySelector('#result-summary'),
   presetBadge: document.querySelector('#preset-badge'),
   equationTotal: document.querySelector('#equation-total'),
@@ -25,6 +29,9 @@ const elements = {
   equationMain: document.querySelector('#equation-main'),
   equationPool: document.querySelector('#equation-pool'),
   detailPerAgent: document.querySelector('#detail-per-agent'),
+  githubLink: document.querySelector('#github-link'),
+  githubStars: document.querySelector('#github-stars'),
+  githubStarCount: document.querySelector('#github-star-count'),
 };
 
 const presetInputs = [...document.querySelectorAll('input[name="preset"]')];
@@ -55,6 +62,9 @@ function clearResult() {
   elements.safe.textContent = '—';
   elements.balanced.textContent = '—';
   elements.maximum.textContent = '—';
+  elements.extremeCount.textContent = '—';
+  elements.extremeSwap.textContent = '—';
+  elements.extremeCombined.textContent = '—';
   elements.resultSummary.textContent = 'RAM과 시스템 여유분을 확인하면 다시 계산합니다.';
   elements.copyButton.disabled = true;
 }
@@ -78,13 +88,13 @@ function render() {
 
   const preset = PRESETS[latestResult.preset];
   const hasCapacity = latestResult.balanced > 0;
-  elements.resultTitle.textContent = hasCapacity ? '균형 추천' : '메모리 부족';
+  elements.resultTitle.textContent = hasCapacity ? '안전 동시 실행' : '메모리 부족';
   elements.recommended.textContent = String(latestResult.balanced);
   elements.safe.textContent = String(latestResult.safe);
   elements.balanced.textContent = String(latestResult.balanced);
   elements.maximum.textContent = String(latestResult.maximum);
   elements.resultSummary.textContent = hasCapacity
-    ? '속도와 메모리 여유 사이의 균형을 둔 권장값입니다.'
+    ? '메모리 부담이 있는 작업을 동시에 실행할 때의 균형 권장값입니다.'
     : '시스템과 메인 에이전트용 RAM을 확보하면 병렬 실행 여유가 남지 않습니다.';
   elements.presetBadge.textContent = `${preset.label} · ${formatGb(preset.perAgentGb)} GB`;
   elements.equationTotal.textContent = formatGb(latestResult.totalRamGb);
@@ -92,6 +102,9 @@ function render() {
   elements.equationMain.textContent = formatGb(latestResult.mainAgentGb);
   elements.equationPool.textContent = formatGb(latestResult.poolGb);
   elements.detailPerAgent.textContent = `${latestResult.perAgentGb.toFixed(1)} GB`;
+  elements.extremeCount.textContent = String(latestResult.extreme.accumulatedAgents);
+  elements.extremeSwap.textContent = `${formatGb(latestResult.extreme.estimatedSwapGb)} GB`;
+  elements.extremeCombined.textContent = `${formatGb(latestResult.extreme.estimatedCombinedMemoryGb)} GB`;
   elements.copyButton.disabled = false;
 }
 
@@ -169,7 +182,8 @@ function copyText() {
     `AgentFit RAM 계산 결과`,
     `전체 RAM: ${formatGb(latestResult.totalRamGb)} GB`,
     `작업 강도: ${preset.label} (에이전트당 ${formatGb(latestResult.perAgentGb)} GB)`,
-    `안전 ${latestResult.safe}개 / 균형 ${latestResult.balanced}개 / 최대 ${latestResult.maximum}개`,
+    `안전 동시 ${latestResult.safe}개 / 균형 동시 ${latestResult.balanced}개 / 메모리 상한 ${latestResult.maximum}개`,
+    `극한 누적 추정: ${latestResult.extreme.accumulatedAgents}개 (RAM+스왑 ${formatGb(latestResult.extreme.estimatedCombinedMemoryGb)} GB)`,
     `시스템 여유분: ${formatGb(latestResult.reserveGb)} GB`,
     `https://tygb99.github.io/ram-subagent-calculator/`,
   ].join('\n');
@@ -190,10 +204,10 @@ async function copyResult() {
 }
 
 function resetCalculator() {
-  elements.ramRange.value = '32';
-  elements.ramNumber.value = '32';
-  elements.reserveRange.max = '32';
-  elements.reserveNumber.max = '32';
+  elements.ramRange.value = '24';
+  elements.ramNumber.value = '24';
+  elements.reserveRange.max = '24';
+  elements.reserveNumber.max = '24';
   document.querySelector('#preset-balanced').checked = true;
   elements.detectStatus.textContent = '';
   elements.copyStatus.textContent = '';
@@ -219,3 +233,9 @@ elements.resetButton.addEventListener('click', resetCalculator);
 elements.copyButton.addEventListener('click', copyResult);
 
 render();
+fetchGitHubStars().then((stars) => {
+  if (stars === null) return;
+  elements.githubStarCount.textContent = stars.toLocaleString('ko-KR');
+  elements.githubStars.hidden = false;
+  elements.githubLink.setAttribute('aria-label', `GitHub 저장소, 스타 ${stars}개`);
+});

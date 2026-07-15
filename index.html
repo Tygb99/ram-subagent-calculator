@@ -7,9 +7,9 @@
     <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
     <title>AgentFit — RAM 기반 서브에이전트 계산기</title>
-    <meta name="description" content="컴퓨터 RAM과 작업 강도를 입력하면 안전, 균형, 최대 서브에이전트 개수를 계산합니다.">
+    <meta name="description" content="RAM을 입력하면 안전 동시 실행 수와 24GB 실측 기반 극한 누적 서브에이전트 수를 함께 계산합니다.">
     <meta property="og:title" content="AgentFit — RAM 기반 서브에이전트 계산기">
-    <meta property="og:description" content="내 컴퓨터 RAM에 맞는 서브에이전트 개수를 투명한 계산식으로 확인하세요.">
+    <meta property="og:description" content="안전 동시 실행 수와 24GB·160개 실측 기반 극한 누적 수를 구분해 확인하세요.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tygb99.github.io/ram-subagent-calculator/">
     <link rel="canonical" href="https://tygb99.github.io/ram-subagent-calculator/">
@@ -22,14 +22,20 @@
     <a class="skip-link" href="#calculator">계산기로 건너뛰기</a>
     <header class="site-header shell">
       <a class="brand" href="./">AgentFit</a>
-      <a class="header-link" href="https://github.com/Tygb99/ram-subagent-calculator">GitHub</a>
+      <a class="header-link github-link" id="github-link" href="https://github.com/Tygb99/ram-subagent-calculator" aria-label="GitHub 저장소">
+        <span>GitHub</span>
+        <span class="github-stars" id="github-stars" hidden>
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="m12 2.4 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.4Z" fill="currentColor"/></svg>
+          <span id="github-star-count">0</span>
+        </span>
+      </a>
     </header>
 
     <main class="app-main shell">
       <section class="app-intro" aria-labelledby="page-title">
         <p class="eyebrow">RAM-AWARE CONCURRENCY</p>
         <h1 id="page-title"><span class="headline-line">RAM을 입력하면,</span><span class="headline-line">적정 개수가 보입니다.</span></h1>
-        <p class="lede">시스템과 메인 에이전트가 쓸 메모리를 먼저 남기고, 서브에이전트가 동시에 실행될 수 있는 범위를 계산합니다.</p>
+        <p class="lede">안전 동시 실행값과 누적 한계를 구분해 보여줍니다.</p>
       </section>
 
       <div class="calculator-layout" id="calculator">
@@ -46,9 +52,9 @@
                 <button class="button button-text compact-button" id="detect-ram" type="button">브라우저로 감지</button>
               </div>
               <div class="range-row">
-                <input type="range" id="ram-range" min="4" max="256" step="4" value="32" aria-describedby="ram-help ram-error">
+                <input type="range" id="ram-range" min="4" max="256" step="4" value="24" aria-describedby="ram-help ram-error">
                 <div class="input-with-unit">
-                  <input class="number-input" id="ram-number" type="number" min="4" max="256" step="4" value="32" required inputmode="numeric" aria-label="전체 RAM, GB" aria-describedby="ram-help ram-error">
+                  <input class="number-input" id="ram-number" type="number" min="4" max="256" step="4" value="24" required inputmode="numeric" aria-label="전체 RAM, GB" aria-describedby="ram-help ram-error">
                   <span aria-hidden="true">GB</span>
                 </div>
               </div>
@@ -78,9 +84,9 @@
                   <button class="button button-text compact-button" id="auto-reserve" type="button">자동값 사용</button>
                 </div>
                 <div class="range-row">
-                  <input type="range" id="reserve-range" min="0" max="32" step="1" value="8" aria-describedby="reserve-help reserve-error">
+                  <input type="range" id="reserve-range" min="0" max="24" step="1" value="6" aria-describedby="reserve-help reserve-error">
                   <div class="input-with-unit">
-                    <input class="number-input" id="reserve-number" type="number" min="0" max="32" step="1" value="8" required inputmode="numeric" aria-label="시스템 여유분, GB" aria-describedby="reserve-help reserve-error">
+                    <input class="number-input" id="reserve-number" type="number" min="0" max="24" step="1" value="6" required inputmode="numeric" aria-label="시스템 여유분, GB" aria-describedby="reserve-help reserve-error">
                     <span aria-hidden="true">GB</span>
                   </div>
                 </div>
@@ -99,40 +105,56 @@
           <div class="result-heading">
             <div>
               <p class="step-label">02 / 결과</p>
-              <h2 id="result-title">균형 추천</h2>
+              <h2 id="result-title">안전 동시 실행</h2>
             </div>
             <span class="result-badge" id="preset-badge">균형 · 2 GB</span>
           </div>
 
           <div class="primary-result">
-            <strong class="result-number" id="recommended-count">9</strong>
+            <strong class="result-number" id="recommended-count">6</strong>
             <span class="result-unit">서브에이전트</span>
           </div>
-          <p class="result-summary" id="result-summary">속도와 메모리 여유 사이의 균형을 둔 권장값입니다.</p>
+          <p class="result-summary" id="result-summary">메모리 부담이 있는 작업을 동시에 실행할 때의 균형 권장값입니다.</p>
 
           <div class="result-scale" aria-label="추천 범위">
             <div class="scale-item">
               <span>안전</span>
-              <strong id="safe-count">7</strong>
+              <strong id="safe-count">5</strong>
             </div>
             <div class="scale-item scale-item-featured">
               <span>균형</span>
-              <strong id="balanced-count">9</strong>
+              <strong id="balanced-count">6</strong>
             </div>
             <div class="scale-item">
               <span>최대</span>
-              <strong id="maximum-count">11</strong>
+              <strong id="maximum-count">8</strong>
             </div>
           </div>
 
+          <section class="notice extreme-result" aria-labelledby="extreme-title">
+            <div class="extreme-heading">
+              <div>
+                <p class="step-label">실측 기반 극한 누적</p>
+                <h3 id="extreme-title">논리 서브에이전트</h3>
+              </div>
+              <div class="extreme-value"><strong id="extreme-count">160</strong><span>개</span></div>
+            </div>
+            <p class="extreme-summary">동시에 실행하는 수가 아니라, 스왑을 허용하며 시간에 걸쳐 생성한 누적 스레드 추정치입니다.</p>
+            <dl class="extreme-stats">
+              <div><dt>추정 스왑</dt><dd id="extreme-swap">21.7 GB</dd></div>
+              <div><dt>RAM + 스왑</dt><dd id="extreme-combined">45.7 GB</dd></div>
+              <div><dt>실측 기준</dt><dd>24 GB → 160개</dd></div>
+            </dl>
+          </section>
+
           <div class="equation" aria-label="메모리 계산식">
-            <span><strong id="equation-total">32</strong> 전체</span>
+            <span><strong id="equation-total">24</strong> 전체</span>
             <span aria-hidden="true">−</span>
-            <span><strong id="equation-reserve">8</strong> 여유</span>
+            <span><strong id="equation-reserve">6</strong> 여유</span>
             <span aria-hidden="true">−</span>
             <span><strong id="equation-main">2</strong> 메인</span>
             <span aria-hidden="true">=</span>
-            <span><strong id="equation-pool">22</strong> GB 풀</span>
+            <span><strong id="equation-pool">16</strong> GB 풀</span>
           </div>
 
           <dl class="detail-list product-details">
@@ -166,12 +188,12 @@
           </article>
           <article>
             <span class="method-index">C</span>
-            <h3>최대</h3>
-            <p>계산상 상한입니다. 스왑과 응답 지연을 피하려면 지속 실행에는 권장하지 않습니다.</p>
+            <h3>극한 누적</h3>
+            <p>24GB Mac에서 약 21시간 동안 160개를 누적 생성한 실측값을 RAM 비율로 환산합니다.</p>
           </article>
         </div>
         <div class="notice limitation-notice">
-          이 계산기는 RAM만 봅니다. CPU 코어 수, 모델 제공자의 동시 요청 제한, 작업 간 의존성이 실제 병렬 개수를 더 낮출 수 있습니다.
+          실측 최고 스왑은 21.69GB였고 RAM과 합치면 약 45.7GB였습니다. 160개는 누적값입니다. <span class="keep-together">동시 실행값은 아닙니다.</span> CPU, 제공자 제한, 작업 종류에 따라 결과는 달라질 수 있습니다.
         </div>
       </section>
     </main>
