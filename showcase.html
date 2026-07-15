@@ -105,6 +105,20 @@
               <div class="detail-row"><dt>서브에이전트 풀</dt><dd id="detail-pool">22.0 GB</dd></div>
             </dl>
           </div>
+          <div class="notice extreme-result">
+            <div class="extreme-heading">
+              <div>
+                <p class="step-label">실측 기반 극한 누적</p>
+                <h3>논리 서브에이전트</h3>
+              </div>
+              <div class="extreme-value"><strong id="showcase-extreme-count">213</strong><span>개</span></div>
+            </div>
+            <p class="extreme-summary">동시 실행 권장값이 아닌 누적 스레드 추정 상태입니다.</p>
+            <dl class="extreme-stats">
+              <div><dt>추정 스왑</dt><dd id="showcase-extreme-swap">28.9 GB</dd></div>
+              <div><dt>RAM + 스왑</dt><dd id="showcase-extreme-combined">60.9 GB</dd></div>
+            </dl>
+          </div>
         </section>
 
         <section class="panel panel-pad showcase-section showcase-section-wide" aria-labelledby="edge-states-title">
@@ -130,6 +144,6 @@
         </section>
       </div>
     </main>
-    <script src="showcase.js" defer></script>
+    <script type="module" src="showcase.js"></script>
   </body>
 </html>

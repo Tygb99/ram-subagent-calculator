@@ -1,3 +1,5 @@
+import { calculateRecommendation } from './calculator.mjs';
+
 const ramRange = document.querySelector('#ram-range');
 const ramNumber = document.querySelector('#ram-number');
 const ramError = document.querySelector('#ram-error');
@@ -11,27 +13,13 @@ const output = {
   reserve: document.querySelector('#detail-reserve'),
   main: document.querySelector('#detail-main'),
   pool: document.querySelector('#detail-pool'),
-};
-
-const perAgentByPreset = {
-  light: 1,
-  balanced: 2,
-  heavy: 4,
+  extremeCount: document.querySelector('#showcase-extreme-count'),
+  extremeSwap: document.querySelector('#showcase-extreme-swap'),
+  extremeCombined: document.querySelector('#showcase-extreme-combined'),
 };
 
 function formatGb(value) {
   return `${value.toFixed(1)} GB`;
-}
-
-function calculate(totalRam, perAgent) {
-  const reserve = Math.max(3, Math.min(16, totalRam * 0.25));
-  const pool = Math.max(0, totalRam - reserve - perAgent);
-  const maximum = Math.floor(pool / perAgent);
-  return {
-    reserve,
-    pool,
-    balanced: Math.floor(maximum * 0.85),
-  };
 }
 
 function selectedPreset() {
@@ -53,19 +41,23 @@ function render() {
     output.reserve.textContent = '—';
     output.main.textContent = '—';
     output.pool.textContent = '—';
+    output.extremeCount.textContent = '—';
+    output.extremeSwap.textContent = '—';
+    output.extremeCombined.textContent = '—';
     return;
   }
 
-  const preset = selectedPreset();
-  const perAgent = perAgentByPreset[preset];
-  const result = calculate(totalRam, perAgent);
+  const result = calculateRecommendation(totalRam, selectedPreset());
   output.count.textContent = String(result.balanced);
   output.label.textContent = result.balanced > 0 ? '균형 추천' : '메모리 부족';
   output.summary.innerHTML = '일상 작업과 <span class="keep-together">갑작스러운 메모리 증가 사이에</span> <span class="keep-together">여유를 둔 권장값입니다.</span>';
   output.total.textContent = formatGb(totalRam);
-  output.reserve.textContent = `-${formatGb(result.reserve)}`;
-  output.main.textContent = `-${formatGb(perAgent)}`;
-  output.pool.textContent = formatGb(result.pool);
+  output.reserve.textContent = `-${formatGb(result.reserveGb)}`;
+  output.main.textContent = `-${formatGb(result.mainAgentGb)}`;
+  output.pool.textContent = formatGb(result.poolGb);
+  output.extremeCount.textContent = String(result.extreme.accumulatedAgents);
+  output.extremeSwap.textContent = formatGb(result.extreme.estimatedSwapGb);
+  output.extremeCombined.textContent = formatGb(result.extreme.estimatedCombinedMemoryGb);
 }
 
 ramRange.addEventListener('input', () => {

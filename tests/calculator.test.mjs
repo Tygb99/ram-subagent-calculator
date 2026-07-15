@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 
 import {
   calculateRecommendation,
+  estimateExtremeCapacity,
+  EXTREME_BENCHMARK,
   parseRamInput,
   PRESETS,
 } from '../calculator.mjs';
@@ -26,6 +28,29 @@ test('uses auditable workload budgets', () => {
   });
 });
 
+test('locks the observed 24 GB extreme benchmark', () => {
+  assert.deepEqual(EXTREME_BENCHMARK, {
+    ramGb: 24,
+    swapGb: 21.69,
+    combinedMemoryGb: 45.69,
+    accumulatedAgents: 160,
+  });
+  assert.deepEqual(estimateExtremeCapacity(24), {
+    accumulatedAgents: 160,
+    estimatedSwapGb: 21.7,
+    estimatedCombinedMemoryGb: 45.7,
+  });
+  assert.deepEqual(calculateRecommendation(24, 'balanced').extreme, estimateExtremeCapacity(24));
+});
+
+test('scales the observed extreme capacity with RAM', () => {
+  assert.deepEqual(estimateExtremeCapacity(48), {
+    accumulatedAgents: 320,
+    estimatedSwapGb: 43.4,
+    estimatedCombinedMemoryGb: 91.4,
+  });
+});
+
 test('reports no safe subagent capacity on a 4 GB balanced machine', () => {
   assert.deepEqual(calculateRecommendation(4, 'balanced'), {
     totalRamGb: 4,
@@ -37,6 +62,11 @@ test('reports no safe subagent capacity on a 4 GB balanced machine', () => {
     safe: 0,
     balanced: 0,
     maximum: 0,
+    extreme: {
+      accumulatedAgents: 26,
+      estimatedSwapGb: 3.6,
+      estimatedCombinedMemoryGb: 7.6,
+    },
   });
 });
 
