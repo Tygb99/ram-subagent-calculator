@@ -84,6 +84,90 @@ node --test tests/*.test.mjs
 - `showcase.html`: component and state showcase.
 - `tests/*.test.mjs`: formula, boundary, and GitHub-response tests.
 
+## Built with Codex and GPT-5.6
+
+AgentFit was created during OpenAI Build Week with Codex using GPT-5.6. The primary build thread is Codex `/feedback` session `019f6419-a624-7cc1-a49c-049aa9419d74`.
+
+### How we collaborated
+
+- **Product direction came from the user.** The initial brief was to create a public GitHub project that recommends a subagent count from the user's RAM. The user then supplied a real 24 GB Mac observation and asked Codex to verify whether the accumulated count was 160, update the model, deploy it, and add the public star count.
+- **Codex accelerated implementation.** GPT-5.6 helped turn the brief into a dependency-free HTML/CSS/JavaScript product, extract the calculation engine into a testable ES module, build the accessible responsive interface, write English and Korean documentation, configure GitHub Actions and Pages, and iterate on browser QA.
+- **The key modeling decision was made collaboratively.** Inspection of the referenced Codex thread showed 160 unique direct child threads accumulated over roughly 21 hours, at most 24 overlapping lifetimes, a later cap of three active jobs, and 21.69 GB of peak swap on a 24 GB Mac. We therefore separated safe active concurrency from the empirical extreme accumulated count instead of presenting 160 as simultaneous capacity.
+- **Codex handled verification and hardening.** The session used parallel review threads for visual QA, accessibility, responsive behavior, tests, repository review, deployment checks, and a production-only GitHub API rate-limit failure. The final star lookup uses Shields.io's cached JSON first, then the GitHub API as a fallback, and fails without affecting calculator results.
+- **Human judgment stayed authoritative.** The user chose the problem, supplied the empirical benchmark and source thread, challenged the initial assumptions, confirmed the corrected 160-thread interpretation, and requested each public-facing revision. Codex proposed, implemented, tested, and deployed those decisions.
+
+### Result
+
+The final project is a working, public developer tool with transparent formulas, 19 automated tests, a no-build local run path, GitHub Pages deployment, and documented limits. GPT-5.6 and Codex were used for the majority of the architecture, implementation, review, debugging, and deployment work; the session ID above provides the build trace for judges.
+
 ## License
 
 [MIT](LICENSE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
